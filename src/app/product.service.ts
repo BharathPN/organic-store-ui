@@ -1,10 +1,10 @@
+import { environment } from './../environments/environment';
 import { Injectable } from '@angular/core';
 import { Product } from './products/product';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
-const apiUrl = 'http://localhost:8080/api/products';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,10 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
+  apiUrl = environment.apiUrl + 'api/products';
+
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(apiUrl + 'Product')
+    return this.http.get<Product[]>(this.apiUrl + 'Product')
       .pipe(
         tap(_ => this.log('fetched Products')),
         catchError(this.handleError('getProducts', []))
